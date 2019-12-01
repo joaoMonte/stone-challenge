@@ -8,6 +8,6 @@ defmodule Account do
   - The balance, which is divided into integer and fractional parts
   """
 
-  defstruct [:owner, :account_number, :currency, integer_balance: 0, fractional_balance: 0]
+  defstruct [:owner, :account_number, :currency, integer_balance: 0, fractionary_balance: 0]
 
 end
