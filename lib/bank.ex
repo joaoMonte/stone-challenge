@@ -4,10 +4,11 @@ defmodule Bank do
   """
 
   @doc """
-  The two forms cover the transference to one or more accounts
+  Debit  and credit functions, which are called during the transfer function
   """
   def debit_account(account, integer_value, fractionary_value) do
     account = %{account | integer_balance: account.integer_balance - integer_value}
+
     if account.fractionary_balance < fractionary_value do
       account = %{account | integer_balance: account.integer_balance - 1}
       account = %{account | fractionary_balance: account.fractionary_balance - fractionary_value + 100}
@@ -18,9 +19,18 @@ defmodule Bank do
   end
 
   def credit_account(account, integer_value, fractionary_value) do
-    IO.puts "Account credited"
+    account = %{account | integer_balance: account.integer_balance + integer_value}
+    account = %{account | fractionary_balance: account.fractionary_balance + fractionary_value}
+
+    if account.fractionary_balance > 100 do
+      account = %{account | integer_balance: account.integer_balance + div(account.fractionary_balance, 100)}
+      account = %{account | fractionary_balance: rem(account.fractionary_balance, 100}
+    end
   end
 
+  @doc """
+  The two forms cover the transference to one or more accounts
+  """
   def transfer_money(sender, receiver, integer_value, fractionary_value) do
     cond do
       sender[:integer_balance] == integer_value ->
