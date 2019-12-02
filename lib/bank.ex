@@ -5,6 +5,7 @@ defmodule Bank do
 
   @doc """
   Debit  and credit functions, which are called during the transfer function
+  They return the updated struct after the operation.
   """
   def debit_account(account, integer_value, fractionary_value) do
     if account.fractionary_balance < fractionary_value do
@@ -31,9 +32,11 @@ defmodule Bank do
   end
 
   @doc """
-  The two forms cover the transference to one or more accounts
+  The two forms cover the transference to one or more accounts. They return a list containing the
+  updated accounts. The head of the list is the sender account and the tail are/is the receivers
   """
   def transfer_money(sender, receiver, integer_value, fractionary_value) do
+    output = []
     cond do
       sender[:integer_balance] == integer_value ->
         if sender[:fractionary_balance] < fractionary_value do
