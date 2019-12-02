@@ -36,22 +36,24 @@ defmodule Bank do
   updated accounts. The head of the list is the sender account and the tail are/is the receivers
   """
   def transfer_money(sender, receiver, integer_value, fractionary_value) do
-    output = []
+
     cond do
-      sender[:integer_balance] == integer_value ->
-        if sender[:fractionary_balance] < fractionary_value do
+      sender.integer_balance == integer_value ->
+        if sender.fractionary_balance < fractionary_value do
           IO.puts "You don't have enough money to make this transfer! Aborting Operation ..."
         else
-            debit_account(sender, integer_value, fractionary_value)
-            credit_account(receiver, integer_value, fractionary_value)
+          sender = debit_account(sender, integer_value, fractionary_value)
+          receiver = credit_account(receiver, integer_value, fractionary_value)
+          [sender] ++ [receiver]
         end
-      sender[:integer_balance] < integer_value ->
+      sender.integer_balance < integer_value ->
         IO.puts "You don't have enough money to make this transfer! Aborting Operation ..."
       true ->
-        debit_account(sender, integer_value, fractionary_value)
-        credit_account(receiver, integer_value, fractionary_value)
-    end
-  end
+        sender = debit_account(sender, integer_value, fractionary_value)
+        receiver = credit_account(receiver, integer_value, fractionary_value)
+        [sender] ++ [receiver]
+      end
+end
 
   def transfer_money(sender, [first_receiver | other_receivers], value) do
     IO.puts "Transfering money from " <> first_receiver <> " to many accounts"
