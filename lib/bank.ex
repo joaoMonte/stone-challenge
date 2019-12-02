@@ -48,19 +48,23 @@ defmodule Bank do
       sender.integer_balance == integer_value ->
         if sender.fractionary_balance < fractionary_value do
           IO.puts "You don't have enough money to make this transfer! Aborting Operation ..."
+          [sender] ++ [receiver]
         else
           sender = debit_account(sender, integer_value, fractionary_value)
           receiver = credit_account(receiver, integer_value, fractionary_value)
           [sender] ++ [receiver]
         end
+
       sender.integer_balance < integer_value ->
         IO.puts "You don't have enough money to make this transfer! Aborting Operation ..."
+        [sender] ++ [receiver]
+
       true ->
         sender = debit_account(sender, integer_value, fractionary_value)
         receiver = credit_account(receiver, integer_value, fractionary_value)
         [sender] ++ [receiver]
       end
-end
+    end
 
   def transfer_money(sender, [first_receiver | other_receivers], value) do
     IO.puts "Transfering money from " <> first_receiver <> " to many accounts"
