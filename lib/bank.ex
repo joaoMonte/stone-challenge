@@ -31,12 +31,19 @@ defmodule Bank do
     end
   end
 
+
+  def divide_transference(accounts_number, integer_value, fractionary_value) do
+    integer_result = div(integer_value, accounts_number)
+    fractionary_result = div(fractionary_value + rem(integer_value, accounts_number) * 100, accounts_number)
+    [integer_result] ++ [fractionary_result]
+  end
+
+
   @doc """
   The two forms cover the transference to one or more accounts. They return a list containing the
   updated accounts. The head of the list is the sender account and the tail are/is the receivers
   """
   def transfer_money(sender, receiver, integer_value, fractionary_value) do
-
     cond do
       sender.integer_balance == integer_value ->
         if sender.fractionary_balance < fractionary_value do
