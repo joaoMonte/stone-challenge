@@ -66,8 +66,30 @@ defmodule Bank do
       end
     end
 
-  def transfer_money(sender, [first_receiver | other_receivers], value) do
-    IO.puts "Transfering money from " <> first_receiver <> " to many accounts"
-  end
+  def transfer_money(sender, [first_receiver | other_receivers], integer_value, fractionary_value) do
+    cond do
+      sender.integer_balance == integer_value ->
+        if sender.fractionary_balance < fractionary_value do
+          IO.puts "You don't have enough money to make this transfer! Aborting Operation ..."
+          [sender | [first_receiver | other_receivers] ]
+        else
+          accounts_number = Enum.count([first_receiver | other_receivers])
+          [divided_int_value, divided_fract_value] = divide_transference(accounts_number, integer_value, fractionary_value)
+          sender = debit_account(sender, integer_value, fractionary_value)
+          [sender | Enum.map([first_receiver | other_receivers], fn(x) -> credit_account(x, divided_int_value, divided_fract_value) end)]
+        end
 
+      sender.integer_balance < integer_value ->
+        IO.puts "You don't have enough money to make this transfer! Aborting Operation ..."
+        [sender | [first_receiver | other_receivers] ]
+
+      true ->
+        accounts_number = Enum.count([first_receiver | other_receivers])
+        [divided_int_value, divided_fract_value] = divide_transference(accounts_number, integer_value, fractionary_value)
+        sender = debit_account(sender, integer_value, fractionary_value)
+        [sender | Enum.map([first_receiver | other_receivers], fn(x) -> credit_account(x, divided_int_value, divided_fract_value) end)]
+      end
+    end
 end
+
+
