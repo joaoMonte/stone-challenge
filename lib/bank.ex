@@ -4,7 +4,9 @@ defmodule Bank do
   """
 
   @doc """
-  Debit  and credit functions, which are called during the transfer function
+  Debit  and credit functions, which are called during the transfer function.
+  Their parameters are: the account, the integer part and the fractionary
+  part of the debit or credit.
   They return the updated struct after the operation.
   """
   def debit_account(account, int_value, fract_value) do
@@ -31,6 +33,14 @@ defmodule Bank do
     end
   end
 
+  @doc """
+  The divide_transference method acts when a transference will be divided between accounts.
+  Its parameters are: the number of accounts which the amount will be divided, the integer
+  and the fractionary parts of the transference.
+  This method return a list whose first value is the integer result and the second is the
+  fractionary result.
+  """
+
   def divide_transference(num_accounts, int_value, fract_value) do
     int_result = div(int_value, num_accounts)
     fract_result = div(fract_value + rem(int_value, num_accounts) * 100, num_accounts)
@@ -39,8 +49,10 @@ defmodule Bank do
 
 
   @doc """
-  The two forms cover the transference to one or more accounts. They return a list containing the
-  updated accounts. The head of the list is the sender account and the tail are/is the receivers
+  The transference method can be applied to one or many receivers.
+  Its first parameter is a list whose the head is the sender_account and the tail is the one or more
+  receivers. The amount will be divided equally by the receivers. The other parameters are
+  the integer and fractionary parts of the transference
   """
 
   def transfer_money( [sender | receivers], int_value, fract_value) do
