@@ -7,34 +7,34 @@ defmodule Bank do
   Debit  and credit functions, which are called during the transfer function
   They return the updated struct after the operation.
   """
-  def debit_account(account, integer_value, fractionary_value) do
-    if account.fractionary_balance < fractionary_value do
-      account = %{account | integer_balance: account.integer_balance - integer_value - 1}
-      %{account | fractionary_balance: account.fractionary_balance - fractionary_value + 100}
+  def debit_account(account, int_value, fract_value) do
+    if account.fractionary_balance < fract_value do
+      account = %{account | integer_balance: account.integer_balance - int_value - 1}
+      %{account | fractionary_balance: account.fractionary_balance - fract_value + 100}
 
     else
-      account = %{account | integer_balance: account.integer_balance - integer_value}
-      %{account | fractionary_balance: account.fractionary_balance - fractionary_value}
+      account = %{account | integer_balance: account.integer_balance - int_value}
+      %{account | fractionary_balance: account.fractionary_balance - fract_value}
     end
   end
 
-  def credit_account(account, integer_value, fractionary_value) do
+  def credit_account(account, int_value, fract_value) do
 
-    if account.fractionary_balance + fractionary_value > 100 do
-      account = %{account | fractionary_balance: account.fractionary_balance + fractionary_value}
+    if account.fractionary_balance + fract_value > 100 do
+      account = %{account | fractionary_balance: account.fractionary_balance + fract_value}
       account = %{account | integer_balance: account.integer_balance + div(account.fractionary_balance, 100)}
       account = %{account | fractionary_balance: rem(account.fractionary_balance, 100)}
-      %{account | integer_balance: account.integer_balance + integer_value}
+      %{account | integer_balance: account.integer_balance + int_value}
     else
-      account = %{account | fractionary_balance: account.fractionary_balance + fractionary_value}
-      %{account | integer_balance: account.integer_balance + integer_value}
+      account = %{account | fractionary_balance: account.fractionary_balance + fract_value}
+      %{account | integer_balance: account.integer_balance + int_value}
     end
   end
 
-  def divide_transference(accounts_number, integer_value, fractionary_value) do
-    integer_result = div(integer_value, accounts_number)
-    fractionary_result = div(fractionary_value + rem(integer_value, accounts_number) * 100, accounts_number)
-    [integer_result] ++ [fractionary_result]
+  def divide_transference(num_accounts, int_value, fract_value) do
+    int_result = div(int_value, num_accounts)
+    fract_result = div(fract_value + rem(int_value, num_accounts) * 100, num_accounts)
+    [int_result] ++ [fract_result]
   end
 
 
@@ -67,6 +67,6 @@ defmodule Bank do
         [sender | Enum.map(receivers, fn(x) -> credit_account(x, div_int_value, div_fract_value) end)]
       end
     end
-end
+  end
 
 
