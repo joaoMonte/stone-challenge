@@ -69,5 +69,18 @@ defmodule ExchangeAgency do
     end
   end
 
+  def buy_renminbis(account, int_value, fract_value) do
+    cond do
+      account.currency == "BRL" ->
+        IO.puts apply_conversion(int_value, fract_value, @brl_to_cny, account.decimals) <> " renminbis"
+      account.currency == "JOD" ->
+        IO.puts apply_conversion(int_value, fract_value, @jod_to_cny, account.decimals) <> " renminbis"
+      account.currency == "CNY" ->
+        IO.puts "You already has renminbis"
+      account.currency == "JPY" ->
+        IO.puts apply_conversion(int_value, fract_value, @jpy_to_cny, account.decimals) <> " renminbis"
+    end
+  end
+
 
 end
