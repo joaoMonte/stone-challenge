@@ -25,19 +25,20 @@ defmodule ExchangeAgency do
   end
 
   def apply_conversion(int_value, fract_value, conv, dec) do
-    (int_value * conv) + (fract_value * inv_pot_10(dec) * conv)
+    value = (int_value * conv) + (fract_value * inv_pot_10(dec) * conv)
+    IO.puts "You bought " <> to_string(value)
   end
 
 
   def buy_yens(account, int_value, fract_value) do
     cond do
       account.currency == "BRL" ->
-        apply_conversion(int_value, fract_value, @brl_to_jpy, account.decimals)
-
-
-
+        apply_conversion(int_value, fract_value, @brl_to_jpy, account.decimals) <> " yens"
+      account.currency == "JOD" ->
+        apply_conversion(int_value, fract_value, @jod_to_jpy, account.decimals) <> " yens"
+      account.currency == "CNY" ->
+        apply_conversion(int_value, fract_value, @cny_to_jpy, account.decimals) <> " yens"
     end
-
   end
 
 end
