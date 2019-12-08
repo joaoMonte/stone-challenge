@@ -11,8 +11,9 @@ defmodule Bank do
   """
   def debit_account(account, int_value, fract_value) do
     if account.fractionary_balance < fract_value do
+      dec = :math.pow(10, account.decimals) |> round
       account = %{account | integer_balance: account.integer_balance - int_value - 1}
-      %{account | fractionary_balance: account.fractionary_balance - fract_value + 100}
+      %{account | fractionary_balance: account.fractionary_balance - fract_value + dec}
 
     else
       account = %{account | integer_balance: account.integer_balance - int_value}
@@ -21,11 +22,12 @@ defmodule Bank do
   end
 
   def credit_account(account, int_value, fract_value) do
-
-    if account.fractionary_balance + fract_value > 100 do
+    dec = :math.pow(10, account.decimals) |> round
+    if account.fractionary_balance + fract_value >= dec do
+      dec = :math.pow(10, account.decimals) |> round
       account = %{account | fractionary_balance: account.fractionary_balance + fract_value}
-      account = %{account | integer_balance: account.integer_balance + div(account.fractionary_balance, 100)}
-      account = %{account | fractionary_balance: rem(account.fractionary_balance, 100)}
+      account = %{account | integer_balance: account.integer_balance + div(account.fractionary_balance, dec)}
+      account = %{account | fractionary_balance: rem(account.fractionary_balance, dec)}
       %{account | integer_balance: account.integer_balance + int_value}
     else
       account = %{account | fractionary_balance: account.fractionary_balance + fract_value}
@@ -36,14 +38,16 @@ defmodule Bank do
   @doc """
   The divide_transference method acts when a transference will be divided between accounts.
   Its parameters are: the number of accounts which the amount will be divided, the integer
-  and the fractionary parts of the transference.
+  and the fractionary parts of the transference. The last parameter is the number os decimals
+  of the account currency
   This method return a list whose first value is the integer result and the second is the
   fractionary result.
   """
 
-  def divide_transference(num_accounts, int_value, fract_value) do
+  def divide_transference(num_accounts, int_value, fract_value, decimals) do
+    dec = :math.pow(10, decimals) |> round
     int_result = div(int_value, num_accounts)
-    fract_result = div(fract_value + rem(int_value, num_accounts) * 100, num_accounts)
+    fract_result = div(fract_value + rem(int_value, num_accounts) * dec, num_accounts)
     [int_result] ++ [fract_result]
   end
 
@@ -63,7 +67,8 @@ defmodule Bank do
           [sender | receivers]
         else
           num_accounts = Enum.count(receivers)
-          [div_int_value, div_fract_value] = divide_transference(num_accounts, int_value, fract_value)
+          decimals = sender.decimals
+          [div_int_value, div_fract_value] = divide_transference(num_accounts, int_value, fract_value, decimals)
           sender = debit_account(sender, int_value, fract_value)
           [sender | Enum.map(receivers, fn(x) -> credit_account(x, div_int_value, div_fract_value) end)]
         end
@@ -74,7 +79,8 @@ defmodule Bank do
 
       true ->
         num_accounts = Enum.count(receivers)
-        [div_int_value, div_fract_value] = divide_transference(num_accounts, int_value, fract_value)
+        decimals = sender.decimals
+        [div_int_value, div_fract_value] = divide_transference(num_accounts, int_value, fract_value, decimals)
         sender = debit_account(sender, int_value, fract_value)
         [sender | Enum.map(receivers, fn(x) -> credit_account(x, div_int_value, div_fract_value) end)]
       end
