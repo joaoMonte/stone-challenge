@@ -1,13 +1,14 @@
-defmodule Account do
-  @moduledoc """
+defmodule AccountJPY do
+   @moduledoc """
   Struct which abstracts an account information.
   Each account has:
   - An owner, who can made transactions with it
-  - The unique account number
   - The currency of the account balance
   - The balance, which is divided into integer and fractional parts
+  - The number of decimals after comma
+  - The structure for all account types are equal
   """
 
-  defstruct [:owner, :account_number, :currency, integer_balance: 0, fractionary_balance: 0]
+  defstruct [:owner, decimals: 0, integer_balance: 0, fractionary_balance: 0, currency: "JPY"]
 
 end
