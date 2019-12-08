@@ -7,7 +7,7 @@ defmodule ExchangeAgency do
   element is the integer value and the second is the fractionary part.
   """
 
-  @jpy_to_cny [1,2]
+  @jpy_to_cny 2
   @jpy_to_brl 1
   @jpy_to_jod 3
   @brl_to_jpy 4
@@ -55,5 +55,19 @@ defmodule ExchangeAgency do
         IO.puts apply_conversion(int_value, fract_value, @jpy_to_jod, account.decimals) <> " jordanian dinars"
     end
   end
+
+  def buy_reals(account, int_value, fract_value) do
+    cond do
+      account.currency == "BRL" ->
+        IO.puts "You already has reals"
+      account.currency == "JOD" ->
+        IO.puts apply_conversion(int_value, fract_value, @jod_to_brl, account.decimals) <> " reals"
+      account.currency == "CNY" ->
+        IO.puts apply_conversion(int_value, fract_value, @cny_to_brl, account.decimals) <> " reals"
+      account.currency == "JPY" ->
+        IO.puts apply_conversion(int_value, fract_value, @jpy_to_brl, account.decimals) <> " reals"
+    end
+  end
+
 
 end
