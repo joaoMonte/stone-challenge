@@ -20,8 +20,23 @@ defmodule ExchangeAgency do
   @jod_to_cny 11
   @jod_to_jpy 12
 
+  def inv_pot_10(value) do
+    :math.pow(10, (-1) * value) |> round
+  end
+
+  def apply_conversion(int_value, fract_value, conv, dec) do
+    (int_value * conv) + (fract_value * inv_pot_10(dec) * conv)
+  end
+
 
   def buy_yens(account, int_value, fract_value) do
+    cond do
+      account.currency == "BRL" ->
+        apply_conversion(int_value, fract_value, @brl_to_jpy, account.decimals)
+
+
+
+    end
 
   end
 
