@@ -43,4 +43,17 @@ defmodule ExchangeAgency do
     end
   end
 
+  def buy_jordanian_dinar(account, int_value, fract_value) do
+    cond do
+      account.currency == "BRL" ->
+        IO.puts apply_conversion(int_value, fract_value, @brl_to_jod, account.decimals) <> " jordanian dinars"
+      account.currency == "JOD" ->
+        IO.puts "You already has jordanian dinars"
+      account.currency == "CNY" ->
+        IO.puts apply_conversion(int_value, fract_value, @cny_to_jod, account.decimals) <> " jordanian dinars"
+      account.currency == "JPY" ->
+        IO.puts apply_conversion(int_value, fract_value, @jpy_to_jod, account.decimals) <> " jordanian dinars"
+    end
+  end
+
 end
