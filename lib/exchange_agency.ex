@@ -1,7 +1,10 @@
 defmodule ExchangeAgency do
   @moduledoc """
   Module which encapsulate the currency exchange operation.
-  It deals with bank accounts
+  It deals with bank accounts.
+  The module has a storage of constants for each conversion allowed by the system.
+  This constants are used in the methods. Each conversion is a list. At this list, the first
+  element is the integer value and the second is the fractionary part.
   """
 
   @jpy_to_cny [1,2]
