@@ -61,6 +61,10 @@ defmodule Bank do
 
   def transfer_money( [sender | receivers], int_value, fract_value) do
     cond do
+      Enum.any?(receivers, fn(account) -> account.currency != sender.currency end) ->
+        IO.puts "All accounts need to be in the same currency to make a transfer"
+        [sender | receivers]
+
       sender.integer_balance == int_value ->
         if sender.fractionary_balance < fract_value do
           IO.puts "You don't have enough money to make this transfer! Aborting Operation ..."
