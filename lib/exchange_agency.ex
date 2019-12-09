@@ -7,18 +7,18 @@ defmodule ExchangeAgency do
   element is the integer value and the second is the fractionary part.
   """
 
-  @jpy_to_cny 2
-  @jpy_to_brl 1
-  @jpy_to_jod 3
-  @brl_to_jpy 4
-  @brl_to_cny 5
-  @brl_to_jod 6
-  @cny_to_brl 7
-  @cny_to_jpy 8
-  @cny_to_jod 9
-  @jod_to_brl 10
-  @jod_to_cny 11
-  @jod_to_jpy 12
+  @jpy_to_cny 0.065
+  @jpy_to_brl 0.038
+  @jpy_to_jod 0.0065
+  @brl_to_jpy 26.23
+  @brl_to_cny 1.70
+  @brl_to_jod 0.17
+  @cny_to_brl 0.59
+  @cny_to_jpy 15.44
+  @cny_to_jod 0.10
+  @jod_to_brl 5.84
+  @jod_to_cny 9.92
+  @jod_to_jpy 153.21
 
   def inv_pot_10(value) do
     :math.pow(10, (-1) * value) |> round
