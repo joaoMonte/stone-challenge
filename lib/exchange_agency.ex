@@ -3,8 +3,7 @@ defmodule ExchangeAgency do
   Module which encapsulate the currency exchange operation.
   It deals with bank accounts.
   The module has a storage of constants for each conversion allowed by the system.
-  This constants are used in the methods. Each conversion is a list. At this list, the first
-  element is the integer value and the second is the fractionary part.
+  This constants are used in the methods.
   """
 
   @jpy_to_cny 0.065
@@ -96,6 +95,4 @@ defmodule ExchangeAgency do
         Bank.debit_account(account, int_value, fract_value)
     end
   end
-
-
 end
