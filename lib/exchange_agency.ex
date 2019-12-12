@@ -23,11 +23,23 @@ defmodule ExchangeAgency do
     :math.pow(10, (-1) * value) |> round
   end
 
+  @doc """
+  The method apply_conversion multiply a value (divided into fract and integer parts) into
+  by the necessary conversion value. its parameters also includes de number of decimals of the
+  input currency (dec)
+  """
+
   def apply_conversion(int_value, fract_value, conv, dec) do
     value = (int_value * conv) + (fract_value * inv_pot_10(dec) * conv)
     "You bought " <> to_string(value)
   end
 
+  @doc """
+  All the buy currency methods works receiving a value (divided into int and fract parts),
+  and an account. These methods returns a list which the head is the value bought by the
+  user and the tail is the updated struct. When a user buy money from other currency, the
+  value is debited from his account.
+  """
   def buy_yens(account, int_value, fract_value) do
     cond do
       account.currency == "BRL" ->
