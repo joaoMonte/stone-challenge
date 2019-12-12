@@ -4,20 +4,41 @@ defmodule Bank do
   """
 
   @doc """
+  The method check_account_balance check if an account has a balance equal or lesser than
+  the integer and fractionary values given as parameters. This method will be used by other
+  bank financial operations.
+  """
+
+  def check_account_balance(account, int_value, fract_value) do
+    if account.integer_balance == int_value do
+      account.fractionary_balance > fract_value
+    else
+      account.integer_balance > int_value
+    end
+  end
+
+
+  @doc """
   Debit  and credit functions, which are called during the transfer function.
   Their parameters are: the account, the integer part and the fractionary
   part of the debit or credit.
   They return the updated struct after the operation.
   """
-  def debit_account(account, int_value, fract_value) do
-    if account.fractionary_balance < fract_value do
-      dec = :math.pow(10, account.decimals) |> round
-      account = %{account | integer_balance: account.integer_balance - int_value - 1}
-      %{account | fractionary_balance: account.fractionary_balance - fract_value + dec}
 
+  def debit_account(account, int_value, fract_value) do
+    if check_account_balance(account, int_value, fract_value) do
+      if account.fractionary_balance < fract_value do
+        dec = :math.pow(10, account.decimals) |> round
+        account = %{account | integer_balance: account.integer_balance - int_value - 1}
+        %{account | fractionary_balance: account.fractionary_balance - fract_value + dec}
+
+      else
+        account = %{account | integer_balance: account.integer_balance - int_value}
+        %{account | fractionary_balance: account.fractionary_balance - fract_value}
+      end
     else
-      account = %{account | integer_balance: account.integer_balance - int_value}
-      %{account | fractionary_balance: account.fractionary_balance - fract_value}
+      IO.puts "You can't debit this value from this account"
+      %{account | currency: account.currency}
     end
   end
 
@@ -65,30 +86,18 @@ defmodule Bank do
         IO.puts "All accounts need to be in the same currency to make a transfer"
         [sender | receivers]
 
-      sender.integer_balance == int_value ->
-        if sender.fractionary_balance < fract_value do
-          IO.puts "You don't have enough money to make this transfer! Aborting Operation ..."
-          [sender | receivers]
-        else
-          num_accounts = Enum.count(receivers)
-          decimals = sender.decimals
-          [div_int_value, div_fract_value] = divide_transference(num_accounts, int_value, fract_value, decimals)
-          sender = debit_account(sender, int_value, fract_value)
-          [sender | Enum.map(receivers, fn(x) -> credit_account(x, div_int_value, div_fract_value) end)]
-        end
-
-      sender.integer_balance < int_value ->
-        IO.puts "You don't have enough money to make this transfer! Aborting Operation ..."
-        [sender | receivers]
-
-      true ->
+      check_account_balance(sender, int_value, fract_value) ->
         num_accounts = Enum.count(receivers)
         decimals = sender.decimals
         [div_int_value, div_fract_value] = divide_transference(num_accounts, int_value, fract_value, decimals)
         sender = debit_account(sender, int_value, fract_value)
         [sender | Enum.map(receivers, fn(x) -> credit_account(x, div_int_value, div_fract_value) end)]
-      end
+
+      true ->
+        IO.puts "You don't have enough money to make this transfer! Aborting Operation ..."
+        [sender | receivers]
     end
   end
 
+end
 
