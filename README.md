@@ -167,23 +167,40 @@ All accounts need to be in the same currency to make a transfer
 ]
 ```
 
+## Exchange money operation
 
-**TODO: Add description**
-
-## Installation
-
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `stone_challenge` to your list of dependencies in `mix.exs`:
+The system also provides an operation to buy money from one currency to other currency. When the user buy money of other currency, the value is debited from his accounts  (so, the user must has the value in his account balance). Usage examples are shown below.
 
 ```elixir
-def deps do
-  [
-    {:stone_challenge, "~> 0.1.0"}
-  ]
-end
+iex> [yens, joao] = ExchangeAgency.buy_yens(joao, 20, 0)
+You bought 524.6 yens
+[
+  524.6,
+  %AccountBRL{
+    currency: "BRL",
+    decimals: 2,
+    fractionary_balance: 0,
+    integer_balance: 280,
+    owner: "Joao"
+  }
+]
 ```
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/stone_challenge](https://hexdocs.pm/stone_challenge).
+The user can’t buy money from his own account currency. In this case, the operation
+returns [0, unaltered_account]
+
+```elixir
+iex(4)> [reals, joao] = ExchangeAgency.buy_reals(joao, 20, 0)
+You already has reals
+[
+  0,
+  %AccountBRL{
+    currency: "BRL",
+    decimals: 2,
+    fractionary_balance: 0,
+    integer_balance: 280,
+    owner: "Joao"
+  }
+]
+```
 
