@@ -1,0 +1,9 @@
+{application,stone_challenge,
+             [{applications,[kernel,stdlib,elixir,logger]},
+              {description,"stone_challenge"},
+              {modules,['Elixir.AccountBRL','Elixir.AccountCNY',
+                        'Elixir.AccountFactory','Elixir.AccountJOD',
+                        'Elixir.AccountJPY','Elixir.Bank',
+                        'Elixir.ExchangeAgency','Elixir.StoneChallenge']},
+              {registered,[]},
+              {vsn,"0.1.0"}]}.
