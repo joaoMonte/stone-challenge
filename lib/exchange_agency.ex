@@ -119,18 +119,27 @@ defmodule ExchangeAgency do
 
   def buy_renminbis(account, int_value, fract_value) do
     cond do
+      !Bank.check_account_balance(account, int_value, fract_value) ->
+        IO.puts "You don't have this balance to buy reals"
+        [0] ++ [account]
       account.currency == "BRL" ->
-        IO.puts apply_conversion(int_value, fract_value, @brl_to_cny, account.decimals) <> " renminbis"
-        Bank.debit_account(account, int_value, fract_value)
+        value = apply_conversion(int_value, fract_value, @brl_to_cny, account.decimals)
+        IO.puts "You bought " <> to_string(value) <> " renminbis"
+        updated_account = Bank.debit_account(account, int_value, fract_value)
+        [value] ++ [updated_account]
       account.currency == "JOD" ->
-        IO.puts apply_conversion(int_value, fract_value, @jod_to_cny, account.decimals) <> " renminbis"
-        Bank.debit_account(account, int_value, fract_value)
+        value = apply_conversion(int_value, fract_value, @jod_to_cny, account.decimals)
+        IO.puts "You bought " <> to_string(value) <> " renminbis"
+        updated_account = Bank.debit_account(account, int_value, fract_value)
+        [value] ++ [updated_account]
       account.currency == "CNY" ->
         IO.puts "You already has renminbis"
-        Bank.debit_account(account, 0, 0)
+        [0] ++ [account]
       account.currency == "JPY" ->
-        IO.puts apply_conversion(int_value, fract_value, @jpy_to_cny, account.decimals) <> " renminbis"
-        Bank.debit_account(account, int_value, fract_value)
+        value = apply_conversion(int_value, fract_value, @jpy_to_cny, account.decimals)
+        IO.puts "You bought " <> to_string(value) <> " renminbis"
+        updated_account = Bank.debit_account(account, int_value, fract_value)
+        [value] ++ [updated_account]
     end
   end
 end
