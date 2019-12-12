@@ -86,30 +86,18 @@ defmodule Bank do
         IO.puts "All accounts need to be in the same currency to make a transfer"
         [sender | receivers]
 
-      sender.integer_balance == int_value ->
-        if sender.fractionary_balance < fract_value do
-          IO.puts "You don't have enough money to make this transfer! Aborting Operation ..."
-          [sender | receivers]
-        else
-          num_accounts = Enum.count(receivers)
-          decimals = sender.decimals
-          [div_int_value, div_fract_value] = divide_transference(num_accounts, int_value, fract_value, decimals)
-          sender = debit_account(sender, int_value, fract_value)
-          [sender | Enum.map(receivers, fn(x) -> credit_account(x, div_int_value, div_fract_value) end)]
-        end
-
-      sender.integer_balance < int_value ->
-        IO.puts "You don't have enough money to make this transfer! Aborting Operation ..."
-        [sender | receivers]
-
-      true ->
+      check_account_balance(sender, int_value, fract_value) ->
         num_accounts = Enum.count(receivers)
         decimals = sender.decimals
         [div_int_value, div_fract_value] = divide_transference(num_accounts, int_value, fract_value, decimals)
         sender = debit_account(sender, int_value, fract_value)
         [sender | Enum.map(receivers, fn(x) -> credit_account(x, div_int_value, div_fract_value) end)]
-      end
+
+      true ->
+        IO.puts "You don't have enough money to make this transfer! Aborting Operation ..."
+        [sender | receivers]
     end
   end
 
+end
 
