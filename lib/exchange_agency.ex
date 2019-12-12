@@ -30,8 +30,7 @@ defmodule ExchangeAgency do
   """
 
   def apply_conversion(int_value, fract_value, conv, dec) do
-    value = (int_value * conv) + (fract_value * inv_pot_10(dec) * conv)
-    "You bought " <> to_string(value)
+    (int_value * conv) + (fract_value * inv_pot_10(dec) * conv)
   end
 
   @doc """
@@ -42,18 +41,27 @@ defmodule ExchangeAgency do
   """
   def buy_yens(account, int_value, fract_value) do
     cond do
+      !Bank.check_account_balance(account, int_value, fract_value) ->
+        IO.puts "You don't have this balance to buy yens"
+        [0] ++ [account]
       account.currency == "BRL" ->
-        IO.puts apply_conversion(int_value, fract_value, @brl_to_jpy, account.decimals) <> " yens"
-        Bank.debit_account(account, int_value, fract_value)
+        value = apply_conversion(int_value, fract_value, @brl_to_jpy, account.decimals)
+        IO.puts "You bought " <> to_string(value) <> " yens"
+        updated_account = Bank.debit_account(account, int_value, fract_value)
+        [value] ++ [updated_account]
       account.currency == "JOD" ->
-        IO.puts apply_conversion(int_value, fract_value, @jod_to_jpy, account.decimals) <> " yens"
-        Bank.debit_account(account, int_value, fract_value)
+        value = apply_conversion(int_value, fract_value, @jod_to_jpy, account.decimals)
+        IO.puts "You bought " <> to_string(value) <> " yens"
+        updated_account = Bank.debit_account(account, int_value, fract_value)
+        [value] ++ [updated_account]
       account.currency == "CNY" ->
-        IO.puts apply_conversion(int_value, fract_value, @cny_to_jpy, account.decimals) <> " yens"
-        Bank.debit_account(account, int_value, fract_value)
+        value = apply_conversion(int_value, fract_value, @cny_to_jpy, account.decimals)
+        IO.puts "You bought " <> to_string(value) <> " yens"
+        updated_account = Bank.debit_account(account, int_value, fract_value)
+        [value] ++ [updated_account]
       account.currency == "JPY" ->
         IO.puts "You already has yens"
-        Bank.debit_account(account, 0, 0)
+        [0] ++ [account]
     end
   end
 
