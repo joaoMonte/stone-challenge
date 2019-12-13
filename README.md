@@ -11,6 +11,14 @@ iex -S mix
 
 ```
 
+The system also has a simple suit of tests. The user can execute them running the following command in the terminal.
+
+```
+mix test
+
+
+```
+
 ## Accounts
 
 An account is a elixir struct which contains the necessary information to perform financial operations. Each account is composed by the following fields:
