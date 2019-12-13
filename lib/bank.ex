@@ -17,7 +17,6 @@ defmodule Bank do
     end
   end
 
-
   @doc """
   Debit  and credit functions, which are called during the transfer function.
   Their parameters are: the account, the integer part and the fractionary
@@ -71,7 +70,6 @@ defmodule Bank do
     fract_result = div(fract_value + rem(int_value, num_accounts) * dec, num_accounts)
     [int_result] ++ [fract_result]
   end
-
 
   @doc """
   The transference method can be applied to one or many receivers.
