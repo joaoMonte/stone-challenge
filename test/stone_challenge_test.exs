@@ -110,7 +110,23 @@ defmodule StoneChallengeTest do
     assert omar == %AccountJOD{owner: "Omar", decimals: 3, integer_balance: 30, fractionary_balance: 300, currency: "JOD"}
   end
 
+  test "Make a debit with carry on a BRL account" do
+    joao = %AccountBRL{owner: "Joao", decimals: 2, integer_balance: 30, fractionary_balance: 20, currency: "BRL"}
+    joao = Bank.debit_account(joao, 20, 50)
+    assert joao == %AccountBRL{owner: "Joao", decimals: 2, integer_balance: 9, fractionary_balance: 70, currency: "BRL"}
+  end
 
+  test "Make a debit with carry on a CNY account" do
+    xing = %AccountCNY{owner: "Xing", decimals: 1, integer_balance: 30, fractionary_balance: 2, currency: "CNY"}
+    xing = Bank.debit_account(xing, 10, 5)
+    assert xing == %AccountCNY{owner: "Xing", decimals: 1, integer_balance: 19, fractionary_balance: 7, currency: "CNY"}
+  end
+
+  test "Make a debit with carry on a JOD account" do
+    omar = %AccountJOD{owner: "Omar", decimals: 3, integer_balance: 30, fractionary_balance: 300, currency: "JOD"}
+    omar = Bank.debit_account(omar, 10, 450)
+    assert omar == %AccountJOD{owner: "Omar", decimals: 3, integer_balance: 19, fractionary_balance: 850, currency: "JOD"}
+  end
 
 
 end
