@@ -66,7 +66,6 @@ defmodule StoneChallengeTest do
     end
   end
 
-
   describe "Make a debit on a " do
     test "BRL account" do
       joao = %AccountBRL{owner: "Joao", decimals: 2, integer_balance: 30, fractionary_balance: 20, currency: "BRL"}
@@ -232,5 +231,28 @@ defmodule StoneChallengeTest do
     end
   end
 
+  describe "Exchange money: " do
+    test "Buy JPY currency money paying with BRL money" do
+      joao = %AccountBRL{owner: "Joao", decimals: 2, integer_balance: 30, fractionary_balance: 20, currency: "BRL"}
+      [yens, joao] = ExchangeAgency.buy_yens(joao, 10, 0)
+      assert joao == %AccountBRL{owner: "Joao", decimals: 2, integer_balance: 20, fractionary_balance: 20, currency: "BRL"}
+      assert yens == 262.3
+    end
+
+    test "Buy BRL currency money paying with BRL money" do
+      joao = %AccountBRL{owner: "Joao", decimals: 2, integer_balance: 30, fractionary_balance: 20, currency: "BRL"}
+      [reals, joao] = ExchangeAgency.buy_reals(joao, 10, 0)
+      assert joao == %AccountBRL{owner: "Joao", decimals: 2, integer_balance: 30, fractionary_balance: 20, currency: "BRL"}
+      assert reals == 0
+    end
+
+    test "Buy JPY currency money paying with BRL money, without have money for it" do
+      joao = %AccountBRL{owner: "Joao", decimals: 2, integer_balance: 30, fractionary_balance: 20, currency: "BRL"}
+      [reals, joao] = ExchangeAgency.buy_reals(joao, 40, 0)
+      assert joao == %AccountBRL{owner: "Joao", decimals: 2, integer_balance: 30, fractionary_balance: 20, currency: "BRL"}
+      assert reals == 0
+    end
+
+  end
 
 end
