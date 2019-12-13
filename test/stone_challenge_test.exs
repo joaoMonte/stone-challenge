@@ -209,7 +209,7 @@ defmodule StoneChallengeTest do
       [xing, xang, xeng] = Bank.transfer_money([xing, xang, xeng], 18, 6)
       assert xing == %AccountCNY{owner: "Xing", decimals: 1, integer_balance: 12, fractionary_balance: 0, currency: "CNY"}
       assert xang == %AccountCNY{owner: "Xang", decimals: 1, integer_balance: 9, fractionary_balance: 3, currency: "CNY"}
-      assert xang == %AccountCNY{owner: "Xang", decimals: 1, integer_balance: 9, fractionary_balance: 3, currency: "CNY"}
+      assert xeng == %AccountCNY{owner: "Xeng", decimals: 1, integer_balance: 9, fractionary_balance: 3, currency: "CNY"}
     end
   end
 
