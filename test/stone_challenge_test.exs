@@ -138,5 +138,41 @@ defmodule StoneChallengeTest do
     end
   end
 
+  describe "Make a transference from one account to one account, which these accounts are" do
+    test "JOD accounts" do
+      omar = %AccountJOD{owner: "Omar", decimals: 3, integer_balance: 30, fractionary_balance: 300, currency: "JOD"}
+      yosef = AccountFactory.factory("JOD", "Yosef")
+      [omar, yosef] = Bank.transfer_money([omar, yosef], 10, 200)
+      assert omar == %AccountJOD{owner: "Omar", decimals: 3, integer_balance: 20, fractionary_balance: 100, currency: "JOD"}
+      assert yosef == %AccountJOD{owner: "Yosef", decimals: 3, integer_balance: 10, fractionary_balance: 200, currency: "JOD"}
+    end
+
+    test "BRL accounts" do
+      joao = %AccountBRL{owner: "Joao", decimals: 2, integer_balance: 30, fractionary_balance: 20, currency: "BRL"}
+      marcos = AccountFactory.factory("BRL", "Marcos")
+      [joao, marcos] = Bank.transfer_money([joao, marcos], 10, 20)
+      assert joao == %AccountBRL{owner: "Joao", decimals: 2, integer_balance: 20, fractionary_balance: 0, currency: "BRL"}
+      assert marcos == %AccountBRL{owner: "Marcos", decimals: 2, integer_balance: 10, fractionary_balance: 20, currency: "BRL"}
+    end
+
+    test "JPY accounts" do
+      uzumaki = %AccountJPY{owner: "Uzumaki", decimals: 0, integer_balance: 30, fractionary_balance: 0, currency: "JPY"}
+      uchiha = AccountFactory.factory("JPY", "Uchiha")
+      [uzumaki, uchiha] = Bank.transfer_money([uzumaki, uchiha], 10, 0)
+      assert uzumaki == %AccountJPY{owner: "Uzumaki", decimals: 0, integer_balance: 20, fractionary_balance: 0, currency: "JPY"}
+      assert uchiha == %AccountJPY{owner: "Uchiha", decimals: 0, integer_balance: 10, fractionary_balance: 0, currency: "JPY"}
+    end
+
+    test "CNY accounts" do
+      xing = %AccountCNY{owner: "Xing", decimals: 1, integer_balance: 30, fractionary_balance: 6, currency: "CNY"}
+      xang = AccountFactory.factory("CNY", "Xang")
+      [xing, xang] = Bank.transfer_money([xing, xang], 10, 2)
+      assert xing == %AccountCNY{owner: "Xing", decimals: 1, integer_balance: 20, fractionary_balance: 4, currency: "CNY"}
+      assert xang == %AccountCNY{owner: "Xang", decimals: 1, integer_balance: 10, fractionary_balance: 2, currency: "CNY"}
+    end
+
+
+  end
+
 
 end
