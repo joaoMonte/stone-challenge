@@ -142,4 +142,5 @@ defmodule ExchangeAgency do
         [value] ++ [updated_account]
     end
   end
+
 end
