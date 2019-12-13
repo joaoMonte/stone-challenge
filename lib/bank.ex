@@ -17,7 +17,6 @@ defmodule Bank do
     end
   end
 
-
   @doc """
   Debit  and credit functions, which are called during the transfer function.
   Their parameters are: the account, the integer part and the fractionary
@@ -28,7 +27,7 @@ defmodule Bank do
   def debit_account(account, int_value, fract_value) do
     if check_account_balance(account, int_value, fract_value) do
       if account.fractionary_balance < fract_value do
-        dec = :math.pow(10, account.decimals) |> round
+        dec = round(:math.pow(10, account.decimals))
         account = %{account | integer_balance: account.integer_balance - int_value - 1}
         %{account | fractionary_balance: account.fractionary_balance - fract_value + dec}
 
@@ -43,9 +42,9 @@ defmodule Bank do
   end
 
   def credit_account(account, int_value, fract_value) do
-    dec = :math.pow(10, account.decimals) |> round
+    dec = round(:math.pow(10, account.decimals))
     if account.fractionary_balance + fract_value >= dec do
-      dec = :math.pow(10, account.decimals) |> round
+      dec = round(:math.pow(10, account.decimals))
       account = %{account | fractionary_balance: account.fractionary_balance + fract_value}
       account = %{account | integer_balance: account.integer_balance + div(account.fractionary_balance, dec)}
       account = %{account | fractionary_balance: rem(account.fractionary_balance, dec)}
@@ -66,12 +65,11 @@ defmodule Bank do
   """
 
   def divide_transference(num_accounts, int_value, fract_value, decimals) do
-    dec = :math.pow(10, decimals) |> round
+    dec = round(:math.pow(10, decimals))
     int_result = div(int_value, num_accounts)
     fract_result = div(fract_value + rem(int_value, num_accounts) * dec, num_accounts)
     [int_result] ++ [fract_result]
   end
-
 
   @doc """
   The transference method can be applied to one or many receivers.
