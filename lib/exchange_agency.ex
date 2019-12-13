@@ -20,7 +20,7 @@ defmodule ExchangeAgency do
   @jod_to_jpy 153.21
 
   def inv_pot_10(value) do
-    :math.pow(10, (-1) * value) |> round
+    round(:math.pow(10, (-1) * value))
   end
 
   @doc """
