@@ -138,7 +138,7 @@ defmodule StoneChallengeTest do
     end
   end
 
-  describe "Make a transference from one account to one account, which these accounts are" do
+  describe "Make a transference from one account to one account, which these accounts are " do
     test "JOD accounts" do
       omar = %AccountJOD{owner: "Omar", decimals: 3, integer_balance: 30, fractionary_balance: 300, currency: "JOD"}
       yosef = AccountFactory.factory("JOD", "Yosef")
@@ -172,7 +172,7 @@ defmodule StoneChallengeTest do
     end
   end
 
-    describe "Make a transference from one account to 2 accounts, which these accounts are" do
+    describe "Make a transference from one account to 2 accounts, which these accounts are " do
       test "JOD accounts" do
         omar = %AccountJOD{owner: "Omar", decimals: 3, integer_balance: 30, fractionary_balance: 300, currency: "JOD"}
         yosef = AccountFactory.factory("JOD", "Yosef")
@@ -211,6 +211,24 @@ defmodule StoneChallengeTest do
         assert xing == %AccountCNY{owner: "Xing", decimals: 1, integer_balance: 12, fractionary_balance: 0, currency: "CNY"}
         assert xang == %AccountCNY{owner: "Xang", decimals: 1, integer_balance: 9, fractionary_balance: 3, currency: "CNY"}
         assert xang == %AccountCNY{owner: "Xang", decimals: 1, integer_balance: 9, fractionary_balance: 3, currency: "CNY"}
+      end
+    end
+
+    describe "Try an invalid transference where " do
+      test "the sender account dont has enough money" do
+        joao = AccountFactory.factory("BRL", "Joao")
+        marcos = AccountFactory.factory("BRL", "Marcos")
+        [joao, marcos] = Bank.transfer_money([joao, marcos], 10, 20)
+        assert joao == %AccountBRL{owner: "Joao", decimals: 2, integer_balance: 0, fractionary_balance: 0, currency: "BRL"}
+        assert marcos == %AccountBRL{owner: "Marcos", decimals: 2, integer_balance: 0, fractionary_balance: 0, currency: "BRL"}
+      end
+
+      test "the accounts have different currencies" do
+        joao = %AccountBRL{owner: "Joao", decimals: 2, integer_balance: 30, fractionary_balance: 20, currency: "BRL"}
+        uchiha = AccountFactory.factory("JPY", "Uchiha")
+        [joao, uchiha] = Bank.transfer_money([joao, uchiha], 10, 20)
+        assert joao == %AccountBRL{owner: "Joao", decimals: 2, integer_balance: 30, fractionary_balance: 20, currency: "BRL"}
+        assert uchiha == %AccountJPY{owner: "Uchiha", decimals: 0, integer_balance: 0, fractionary_balance: 0, currency: "JPY"}
       end
     end
 
