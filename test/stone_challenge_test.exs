@@ -93,28 +93,30 @@ defmodule StoneChallengeTest do
     end
   end
 
-  test "Make a invalid debit on a BRL account" do
-    joao = %AccountBRL{owner: "Joao", decimals: 2, integer_balance: 30, fractionary_balance: 20, currency: "BRL"}
-    joao = Bank.debit_account(joao, 40, 10)
-    assert joao == %AccountBRL{owner: "Joao", decimals: 2, integer_balance: 30, fractionary_balance: 20, currency: "BRL"}
-  end
+  describe "Make a invalid debit on a " do
+    test "BRL account" do
+      joao = %AccountBRL{owner: "Joao", decimals: 2, integer_balance: 30, fractionary_balance: 20, currency: "BRL"}
+      joao = Bank.debit_account(joao, 40, 10)
+      assert joao == %AccountBRL{owner: "Joao", decimals: 2, integer_balance: 30, fractionary_balance: 20, currency: "BRL"}
+    end
 
-  test "Make a invalid debit on a CNY account" do
-    xing = %AccountCNY{owner: "Xing", decimals: 1, integer_balance: 30, fractionary_balance: 2, currency: "CNY"}
-    xing = Bank.debit_account(xing, 40, 1)
-    assert xing == %AccountCNY{owner: "Xing", decimals: 1, integer_balance: 30, fractionary_balance: 2, currency: "CNY"}
-  end
+    test "CNY account" do
+      xing = %AccountCNY{owner: "Xing", decimals: 1, integer_balance: 30, fractionary_balance: 2, currency: "CNY"}
+      xing = Bank.debit_account(xing, 40, 1)
+      assert xing == %AccountCNY{owner: "Xing", decimals: 1, integer_balance: 30, fractionary_balance: 2, currency: "CNY"}
+    end
 
-  test "Make a invalid debit on a JPY account" do
-    uzumaki = %AccountJPY{owner: "Uzumaki", decimals: 0, integer_balance: 30, fractionary_balance: 0, currency: "JPY"}
-    uzumaki = Bank.debit_account(uzumaki, 40, 0)
-    assert uzumaki == %AccountJPY{owner: "Uzumaki", decimals: 0, integer_balance: 30, fractionary_balance: 0, currency: "JPY"}
-  end
+    test "JPY account" do
+      uzumaki = %AccountJPY{owner: "Uzumaki", decimals: 0, integer_balance: 30, fractionary_balance: 0, currency: "JPY"}
+      uzumaki = Bank.debit_account(uzumaki, 40, 0)
+      assert uzumaki == %AccountJPY{owner: "Uzumaki", decimals: 0, integer_balance: 30, fractionary_balance: 0, currency: "JPY"}
+    end
 
-  test "Make a invalid debit on a JOD account" do
-    omar = %AccountJOD{owner: "Omar", decimals: 3, integer_balance: 30, fractionary_balance: 300, currency: "JOD"}
-    omar = Bank.debit_account(omar, 40, 150)
-    assert omar == %AccountJOD{owner: "Omar", decimals: 3, integer_balance: 30, fractionary_balance: 300, currency: "JOD"}
+    test "JOD account" do
+      omar = %AccountJOD{owner: "Omar", decimals: 3, integer_balance: 30, fractionary_balance: 300, currency: "JOD"}
+      omar = Bank.debit_account(omar, 40, 150)
+      assert omar == %AccountJOD{owner: "Omar", decimals: 3, integer_balance: 30, fractionary_balance: 300, currency: "JOD"}
+    end
   end
 
   test "Make a debit with carry on a BRL account" do
